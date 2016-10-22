@@ -10,18 +10,18 @@ type(
         Data models.User `json:"data"`
     }
 
-    MusicResource struct{
-        Data models.Music `json:"data"`
-    }
+	UserProjectResource struct{
+		Data []models.UserProjectModel `json:"data"`
+	}
 
-    AlbumResource struct{
-        Data models.Album `json:"data"`
-    }
+	ProyectoResource struct {
+		Data models.Proyecto `json:"data"`
+	}
 
-    MessageUploadResource struct{
-        Data MessageUploadModel `json:"data"`
-    }
-    
+	ProyectosResource struct{
+		Data []models.Proyecto `json:"data"`
+	}
+	
     AuthUserResource struct {
         Data AuthUserModel `json:"data"`
     }
@@ -33,11 +33,6 @@ type(
     LoginModel struct {
         Email string `json:"email"`
         Password string `json:"password"`
-    }
-
-    MessageUploadModel struct{
-        Message string `json:"message"`
-        Url string `json:"url"`
     }
     
     AuthUserModel struct {

@@ -3,5 +3,5 @@
     "MongoDBHost": "127.0.0.1",
     "MongoDBUser": "",
     "MongoDBPwd": "",
-    "Database": "diseño"
+    "Database": "licitacion"
 }

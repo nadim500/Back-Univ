@@ -45,45 +45,22 @@ func addIndexes(){
         Background: true,
         Sparse: true,
     }
-    autorIndex := mgo.Index{
-        Key: []string{"datecreated"},
+	proyectoIndex := mgo.Index{
+		Key: []string{"datestart"},
         Unique: false,
         Background: true,
         Sparse: true,
-    }
-    albumIndex := mgo.Index{
-        Key: []string{"autorid"},
-        Unique: false,
-        Background: true,
-        Sparse: true,
-    }
-    musicIndex := mgo.Index{
-        Key: []string{"albumid"},
-        Unique: false,
-        Background: true,
-        Sparse: true,
-    }
+	}
     session := GetSession().Copy()
     defer session.Close()
     userCol := session.DB(AppConfig.Database).C("users")
-    autorCol := session.DB(AppConfig.Database).C("autors")
-    albumCol := session.DB(AppConfig.Database).C("albums")
-    musicCol := session.DB(AppConfig.Database).C("musics")
     err = userCol.EnsureIndex(userIndex)
     if err != nil{
         log.Fatalf("[addIndexes]: %s\n", err)
     }
-    err = autorCol.EnsureIndex(autorIndex)
-    if err != nil{
-        log.Fatalf("[addIndexes]: %s\n", err)
-    }
-    err = albumCol.EnsureIndex(albumIndex)
-    if err != nil{
-        log.Fatalf("[addIndexes]: %s\n", err)
-    }
-    err = musicCol.EnsureIndex(musicIndex)
-    if err != nil{
-        log.Fatalf("[addIndexes]: %s\n", err)
-    }
-    
+	proyectoCol := session.DB(AppConfig.Database).C("proyectos")
+	err = proyectoCol.EnsureIndex(proyectoIndex)
+	if err != nil{
+		log.Fatalf("[addIndexes]: %s\n", err)
+	}
 }
