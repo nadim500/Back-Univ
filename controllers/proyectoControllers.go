@@ -5,6 +5,7 @@ import(
     "encoding/json"
     "net/http"
 	"../data"
+    "github.com/gorilla/mux"
 )
 
 func CreateProject(w http.ResponseWriter, r *http.Request){
@@ -33,6 +34,31 @@ func CreateProject(w http.ResponseWriter, r *http.Request){
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	w.Write(j)
+}
+
+func GetProjectById(w http.ResponseWriter, r *http.Request){
+    w.Header().Set("Access-Control-Allow-Origin", "*");
+    vars := mux.Vars(r)
+    id := vars["id"]
+    context := NewContext()
+    defer context.Close()
+    col := context.DbCollection("proyectos")
+    repo := &data.ProyectoRepository{C: col}
+    project, err := repo.GetById(id)
+    if err != nil{
+        log.Println("Error en encontrar 1 projecto: ",err)
+        panic(err)
+    }
+    j,err := json.Marshal(ProyectoResource{Data: project})
+	if err != nil{
+		log.Println("Error en marshal 1 projecto : ",err)
+		panic(err)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(j)
+    
+    
 }
 
 func GetProjects(w http.ResponseWriter, r *http.Request){

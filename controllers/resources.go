@@ -21,6 +21,38 @@ type(
 	ProyectosResource struct{
 		Data []models.Proyecto `json:"data"`
 	}
+
+    DocumentoResource struct{
+        Data models.Documento `json:"data"`
+    }
+
+    DocumentosResource struct{
+        Data []models.Documento `json:"data"`
+    }
+
+    CategoriaResource struct{
+        Data models.Categoria `json:"data"`
+    }
+
+    CategoriasResource struct{
+        Data []models.Categoria `json:"data"`
+    }
+
+    TrabajadorResource struct{
+        Data models.Trabajador `json:"data"`
+    }
+
+    TrabajadoresResource struct{
+        Data []models.Trabajador `json:"data"`
+    }
+
+    PersonalResource struct{
+        Data models.Personal `json:"data"`
+    }
+
+    PersonalsResource struct{
+        Data []models.Personal `json:"data"`
+    }
 	
     AuthUserResource struct {
         Data AuthUserModel `json:"data"`

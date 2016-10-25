@@ -8,5 +8,9 @@ func InitRoutes() *mux.Router{
     router := mux.NewRouter().StrictSlash(false)
     router = SetUserRoutes(router)
 	router = SetProyectoRoutes(router)
+    router = SetDocumentosRoutes(router)
+    router = SetPersonalsRoutes(router)
+    router = SetTrabajadoresRoutes(router)
+    router = SetCategoriasRoutes(router)
     return router
 }

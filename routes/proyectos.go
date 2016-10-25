@@ -8,5 +8,6 @@ import(
 func SetProyectoRoutes(router *mux.Router) *mux.Router{
 	router.HandleFunc("/proyectos",controllers.CreateProject).Methods("POST")
 	router.HandleFunc("/proyectos",controllers.GetProjects).Methods("GET")
+    router.HandleFunc("/proyectos/{id}",controllers.GetProjectById).Methods("GET")
 	return router
 }

@@ -43,7 +43,6 @@ func (r *UserRepository) Login(user models.User)(u models.User, err error){
 	return u, nil
 }
 
-//func (r *UserRepository) GetProjects() ([]models.UserProjectModel, error){
 func (r *UserRepository) GetProjects() []models.UserProjectModel{
 	var users []models.UserProjectModel
 	iter := r.C.Pipe([]bson.M{
@@ -54,10 +53,5 @@ func (r *UserRepository) GetProjects() []models.UserProjectModel{
 		result.HashPassword = nil
 		users = append(users, result)
 	}
-	//if err := iter.Close(); err != nil{
-		//return users,err
-		//return err
-	//}
-	//return users, nil
 	return users
 }

@@ -92,10 +92,6 @@ func GetProjectsOfUser(w http.ResponseWriter, r *http.Request){
 	col := context.DbCollection("users")
 	repo := data.UserRepository{C: col}
 	projectos := repo.GetProjects()
-	/*if err != nil{
-		log.Println("Error en consulta lookup : ",err)
-		panic(err)
-	}*/
 	j,err := json.Marshal(UserProjectResource{Data: projectos})
 	if err != nil{
 		log.Println("Error en marshal projectos : ",err)

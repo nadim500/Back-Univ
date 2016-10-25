@@ -17,6 +17,11 @@ func(p *ProyectoRepository) Create(proyecto *models.Proyecto) error{
 	return err
 }
 
+func(p *ProyectoRepository) GetById(id string) (project models.Proyecto, err error){
+    err = p.C.FindId(bson.ObjectIdHex(id)).One(&project)
+    return
+}
+
 func(p *ProyectoRepository) GetAll() []models.Proyecto{
 	var projects []models.Proyecto
 	iter := p.C.Find(nil).Iter()
