@@ -22,6 +22,10 @@ type(
 		Data []models.Proyecto `json:"data"`
 	}
 
+	ProyectosResourceAll struct{
+		Data []models.ProyectoWithAll `json:"data"`
+	}
+
     DocumentoResource struct{
         Data models.Documento `json:"data"`
     }

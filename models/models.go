@@ -82,7 +82,7 @@ type(
         ProyectoId bson.ObjectId `bson:",omitempty" json:"proyectoid,omitempty"`
         TrabajadorId bson.ObjectId `bson:",omitempty" json:"trabajadorid,omitempty"`
         DocumentoId bson.ObjectId `bson:",omitempty" json:"documentoid,omitempty"`
-        Trabajador Trabajador `json:trabajador`
+        Trabajador Trabajador `json:"trabajador"`
     }
 
     DocumentoCategoryPersonal struct{
@@ -95,7 +95,7 @@ type(
         DateCreated time.Time `json:"datecreated"`
         Comentario string `json:"comentario"`
         UrlDocument string `json:"urldocument"`
-        Category Categoria `json:"category"`
+        Categoria Categoria `json:"categoria"`
         Personal PersonalTrabajador `json:"personal"`
     }
 
@@ -119,7 +119,7 @@ type(
 		DateEnd time.Time `json:"dateend"`
 		DateEndFake time.Time `json:"dateendfake"`
         Documents []DocumentoCategoryPersonal `json:"documents"`
-        Personals []PersonalTarea `json:"personals"`
+        //Personals []PersonalTarea `json:"personals"`
     }
 
 	UserProjectModel struct{
