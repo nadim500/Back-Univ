@@ -99,6 +99,28 @@ func(p *ProyectoRepository) GetAllTodo(id string) []models.ProyectoWithAll{
 			},
 		},
 		bson.M{
+			"$lookup": bson.M{
+				"from":"personals",
+				"localField":"_id",
+				"foreignField":"proyectoid",
+				"as":"personals",
+			},
+		},
+		bson.M{
+			"$unwind": bson.M{
+				"path":"$personals",
+				"preserveNullAndEmptyArrays":true,
+			},
+		},
+		bson.M{
+			"$lookup": bson.M{
+				"from": "trabajadores",
+				"localField": "personals.trabajadorid",
+				"foreignField": "_id",
+				"as": "personals.trabajador",
+			},
+		},
+		bson.M{
 			"$group": bson.M{
 				"_id":"$_id",
 				"codigo":bson.M{
@@ -124,6 +146,9 @@ func(p *ProyectoRepository) GetAllTodo(id string) []models.ProyectoWithAll{
 				},
 				"documents":bson.M{
 					"$push": "$documents",
+				},
+				"personals":bson.M{
+					"$push": "$personals",
 				},
 			},
 		},

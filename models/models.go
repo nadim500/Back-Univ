@@ -104,8 +104,8 @@ type(
         ProyectoId bson.ObjectId `bson:",omitempty" json:"proyectoid,omitempty"`
         TrabajadorId bson.ObjectId `bson:",omitempty" json:"trabajadorid,omitempty"`
         DocumentoId bson.ObjectId `bson:",omitempty" json:"documentoid,omitempty"`
-        Trabajador Trabajador `json:trabajador`
-        Tareas []Tarea `json:"tareas"`
+        Trabajador []Trabajador `json:"trabajador"`
+        //Tareas []Tarea `json:"tareas"`
     }
 
     ProyectoWithAll struct{
@@ -119,7 +119,7 @@ type(
 		DateEnd time.Time `json:"dateend"`
 		DateEndFake time.Time `json:"dateendfake"`
         Documents []DocumentoCategoryPersonal `json:"documents"`
-        //Personals []PersonalTarea `json:"personals"`
+        Personals []PersonalTarea `json:"personals"`
     }
 
 	UserProjectModel struct{
