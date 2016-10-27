@@ -57,6 +57,14 @@ type(
     PersonalsResource struct{
         Data []models.Personal `json:"data"`
     }
+
+    TareaResource struct {
+		Data models.Tarea `json:"data"`
+	}
+
+	TareasResource struct{
+		Data []models.Tarea `json:"data"`
+	}
 	
     AuthUserResource struct {
         Data AuthUserModel `json:"data"`

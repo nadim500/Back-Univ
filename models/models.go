@@ -104,8 +104,8 @@ type(
         ProyectoId bson.ObjectId `bson:",omitempty" json:"proyectoid,omitempty"`
         TrabajadorId bson.ObjectId `bson:",omitempty" json:"trabajadorid,omitempty"`
         DocumentoId bson.ObjectId `bson:",omitempty" json:"documentoid,omitempty"`
-        Trabajador []Trabajador `json:"trabajador"`
-        //Tareas []Tarea `json:"tareas"`
+        Trabajador Trabajador `json:"trabajador"`
+        Tareas []Tarea `json:"tareas"`
     }
 
     ProyectoWithAll struct{

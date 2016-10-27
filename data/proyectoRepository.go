@@ -107,22 +107,11 @@ func(p *ProyectoRepository) GetAllTodo(id string) []models.ProyectoWithAll{
 			},
 		},
 		bson.M{
-			"$unwind": bson.M{
-				"path":"$personals",
-				"preserveNullAndEmptyArrays":true,
-			},
-		},
-		bson.M{
-			"$lookup": bson.M{
-				"from": "trabajadores",
-				"localField": "personals.trabajadorid",
-				"foreignField": "_id",
-				"as": "personals.trabajador",
-			},
-		},
-		bson.M{
 			"$group": bson.M{
 				"_id":"$_id",
+                "userid":bson.M{
+                    "$first": "$userid",
+                },
 				"codigo":bson.M{
 					"$first": "$codigo",
 				},
@@ -147,7 +136,103 @@ func(p *ProyectoRepository) GetAllTodo(id string) []models.ProyectoWithAll{
 				"documents":bson.M{
 					"$push": "$documents",
 				},
-				"personals":bson.M{
+                "personals":bson.M{
+					"$last": "$personals",
+				},
+			},
+		},
+        bson.M{
+			"$unwind": bson.M{
+				"path":"$personals",
+				"preserveNullAndEmptyArrays":true,
+			},
+		},
+        
+		bson.M{
+			"$lookup": bson.M{
+				"from": "trabajadores",
+				"localField": "personals.trabajadorid",
+				"foreignField": "_id",
+				"as": "personals.trabajador",
+			},
+		},
+        bson.M{
+            "$lookup": bson.M{
+                "from": "tareas",
+                "localField": "personals._id",
+                "foreignField": "personalid",
+                "as": "personals.tareas",
+            },
+        },
+        bson.M{
+			"$unwind": bson.M{
+				"path":"$personals.trabajador",
+				"preserveNullAndEmptyArrays":true,
+			},
+		},
+
+        /*bson.M{
+			"$unwind": bson.M{
+				"path":"$personals.tareas",
+				"preserveNullAndEmptyArrays":true,
+			},
+		},
+
+        bson.M{
+            "$lookup": bson.M{
+                "from": "personals",
+                "localField": "personals.tareas.personalid",
+                "foreignField": "_id",
+                "as": "personals.tareas.personal",
+            },
+        },
+
+        bson.M{
+			"$unwind": bson.M{
+				"path":"$personals.tareas.personal",
+				"preserveNullAndEmptyArrays":true,
+			},
+		},
+
+        bson.M{
+			"$lookup": bson.M{
+				"from":"trabajadores",
+				"localField":"personals.tareas.personal.trabajadorid",
+				"foreignField":"_id",
+				"as":"personals.tareas.personal.trabajador",
+			},
+		},*/
+        bson.M{
+			"$group": bson.M{
+				"_id":"$_id",
+                "userid":bson.M{
+                    "$first": "$userid",
+                },
+				"codigo":bson.M{
+					"$first": "$codigo",
+				},
+				"nombre":bson.M{
+					"$first": "$nombre",
+				},
+				"descripcion":bson.M{
+					"$first": "$descripcion",
+				},
+				"datestart":bson.M{
+					"$first": "$datestart",
+				},
+				"dateend":bson.M{
+					"$first": "$dateend",
+				},
+				"dateendfake":bson.M{
+					"$first": "$dateendfake",
+				},
+				"status":bson.M{
+					"$first": "$status",
+				},
+				"documents":bson.M{
+					"$last": "$documents",
+				},
+                "personals":bson.M{
 					"$push": "$personals",
 				},
 			},
