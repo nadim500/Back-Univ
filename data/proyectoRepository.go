@@ -161,7 +161,7 @@ func(p *ProyectoRepository) GetAllTodo(id string) []models.ProyectoWithAll{
                 "from": "tareas",
                 "localField": "personals._id",
                 "foreignField": "personalid",
-                "as": "personals.tareas",
+                "as": "tareas",
             },
         },
         bson.M{
@@ -171,12 +171,35 @@ func(p *ProyectoRepository) GetAllTodo(id string) []models.ProyectoWithAll{
 			},
 		},
 
-        /*bson.M{
+        bson.M{
 			"$unwind": bson.M{
-				"path":"$personals.tareas",
+				"path":"$tareas",
 				"preserveNullAndEmptyArrays":true,
 			},
 		},
+
+        bson.M{
+            "$project": bson.M{
+                "_id": 1,
+                "codigo": 1,
+                "nombre": 1,
+                "descripcion": 1,
+                "status": 1,
+                "datestart": 1,
+                "dateend": 1,
+                "dateendfake": 1,
+                "documents": 1,
+                "personals": 1,
+                "tareas.trabajador": "$personals.trabajador.nombre",
+                "tareas.nombre": 1,
+                "tareas.datestart": 1,
+                "tareas.dateend": 1,
+                "tareas._id": 1,
+                "tareas.personalid": 1,
+            },
+        },
+
+        /*
 
         bson.M{
             "$lookup": bson.M{
@@ -202,6 +225,7 @@ func(p *ProyectoRepository) GetAllTodo(id string) []models.ProyectoWithAll{
 				"as":"personals.tareas.personal.trabajador",
 			},
 		},*/
+        
         bson.M{
 			"$group": bson.M{
 				"_id":"$_id",
@@ -235,6 +259,9 @@ func(p *ProyectoRepository) GetAllTodo(id string) []models.ProyectoWithAll{
                 "personals":bson.M{
 					"$push": "$personals",
 				},
+                "tareas": bson.M{
+                    "$push": "$tareas",
+                },
 			},
 		},
 	}).Iter()
