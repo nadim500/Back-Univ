@@ -26,3 +26,36 @@ func(d *PersonalRepository) GetAll() []models.Personal{
 	}
 	return personals
 }
+
+func(d *PersonalRepository) GetAllForProject(id string) []models.Trabajador{
+	var personals []models.Trabajador
+	iter := d.C.Pipe([]bson.M{
+		bson.M{
+			"$match": bson.M{
+				"proyectoid": bson.ObjectIdHex(id),
+			},
+		},
+		bson.M{
+			"$lookup": bson.M{
+				"from": "trabajadores",
+				"localField": "trabajadorid",
+				"foreignField": "_id",
+				"as": "trabajador",
+			},
+		},
+		bson.M{
+			"$unwind": "$trabajador",
+		},
+		bson.M{
+			"$project": bson.M{
+				"_id": 1,
+				"nombre": "$trabajador.nombre",
+			},
+		},
+	}).Iter()
+	result := models.Trabajador{}
+	for iter.Next(&result){
+		personals = append(personals, result)
+	}
+	return personals
+}

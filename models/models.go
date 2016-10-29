@@ -34,6 +34,7 @@ type(
         Nombre string `json:"nombre"`
         Version string `json:"version"`
         DateCreated time.Time `json:"datecreated"`
+		DateRecordatorio time.Time `json:"daterecordatorio"`
         Comentario string `json:"comentario"`
         UrlDocument string `json:"urldocument"`
     }

@@ -5,6 +5,7 @@ import(
     "encoding/json"
     "net/http"
 	"../data"
+	"github.com/gorilla/mux"
 )
 
 func CreatePersonal(w http.ResponseWriter, r *http.Request){
@@ -51,4 +52,23 @@ func GetPersonals(w http.ResponseWriter, r *http.Request){
 	w.WriteHeader(http.StatusOK)
 	w.Write(j)
 	
+}
+
+func GetPersonalsProject(w http.ResponseWriter, r *http.Request){
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	vars := mux.Vars(r)
+    id := vars["id"]
+	context := NewContext()
+	defer context.Close()
+	col := context.DbCollection("personals")
+	repo := data.PersonalRepository{C: col}
+	personals := repo.GetAllForProject(id)
+	j,err := json.Marshal(TrabajadoresResource{Data: personals})
+	if err != nil{
+		log.Println("Error en marshal personals for project: ",err)
+		panic(err)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(j)
 }
