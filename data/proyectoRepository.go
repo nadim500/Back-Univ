@@ -98,14 +98,14 @@ func(p *ProyectoRepository) GetAllTodo(id string) []models.ProyectoWithAll{
 				"preserveNullAndEmptyArrays":true,
 			},
 		},
-		bson.M{
+		/*bson.M{
 			"$lookup": bson.M{
 				"from":"personals",
 				"localField":"_id",
 				"foreignField":"proyectoid",
 				"as":"personals",
 			},
-		},
+		},*/
 		bson.M{
 			"$group": bson.M{
 				"_id":"$_id",
@@ -136,11 +136,21 @@ func(p *ProyectoRepository) GetAllTodo(id string) []models.ProyectoWithAll{
 				"documents":bson.M{
 					"$push": "$documents",
 				},
-                "personals":bson.M{
+                /*"personals":bson.M{
 					"$last": "$personals",
-				},
+				},*/
 			},
 		},
+
+        bson.M{
+			"$lookup": bson.M{
+				"from":"personals",
+				"localField":"_id",
+				"foreignField":"proyectoid",
+				"as":"personals",
+			},
+		},
+        
         bson.M{
 			"$unwind": bson.M{
 				"path":"$personals",
@@ -198,33 +208,6 @@ func(p *ProyectoRepository) GetAllTodo(id string) []models.ProyectoWithAll{
                 "tareas.personalid": 1,
             },
         },
-
-        /*
-
-        bson.M{
-            "$lookup": bson.M{
-                "from": "personals",
-                "localField": "personals.tareas.personalid",
-                "foreignField": "_id",
-                "as": "personals.tareas.personal",
-            },
-        },
-
-        bson.M{
-			"$unwind": bson.M{
-				"path":"$personals.tareas.personal",
-				"preserveNullAndEmptyArrays":true,
-			},
-		},
-
-        bson.M{
-			"$lookup": bson.M{
-				"from":"trabajadores",
-				"localField":"personals.tareas.personal.trabajadorid",
-				"foreignField":"_id",
-				"as":"personals.tareas.personal.trabajador",
-			},
-		},*/
         
         bson.M{
 			"$group": bson.M{
@@ -255,9 +238,6 @@ func(p *ProyectoRepository) GetAllTodo(id string) []models.ProyectoWithAll{
 				},
 				"documents":bson.M{
 					"$last": "$documents",
-				},
-                "personals":bson.M{
-					"$push": "$personals",
 				},
                 "tareas": bson.M{
                     "$push": "$tareas",
