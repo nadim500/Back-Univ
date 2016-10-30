@@ -54,7 +54,6 @@ type(
         Id bson.ObjectId `bson:"_id,omitempty" json:"id"`
         ProyectoId bson.ObjectId `bson:",omitempty" json:"proyectoid,omitempty"`
         TrabajadorId bson.ObjectId `bson:",omitempty" json:"trabajadorid,omitempty"`
-        DocumentoId bson.ObjectId `bson:",omitempty" json:"documentoid,omitempty"`
     }
 
     Tarea struct{
@@ -63,6 +62,18 @@ type(
         Nombre string `json:"nombre"`
         DateStart time.Time `json:"datestart"`
         DateEnd time.Time `json:"dateend"`
+		DateRegistro time.Time `json:"dateregistro"`
+		DateRecordatorio time.Time `json:"daterecordatorio"`
+    }
+
+	CheckTarea struct{
+		ProyectoId bson.ObjectId `bson:",omitempty" json:"proyectoid,omitempty"`
+        TrabajadorId bson.ObjectId `bson:",omitempty" json:"trabajadorid,omitempty"`
+        Nombre string `json:"nombre"`
+        DateStart time.Time `json:"datestart"`
+        DateEnd time.Time `json:"dateend"`
+		DateRegistro time.Time `json:"dateregistro"`
+		DateRecordatorio time.Time `json:"daterecordatorio"`
     }
 
     DocumentoCategory struct{

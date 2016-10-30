@@ -54,6 +54,36 @@ func GetPersonals(w http.ResponseWriter, r *http.Request){
 	
 }
 
+/*func CheckPersonal(w http.ResponseWriter, r *http.Request){
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	var dataResource PersonalResource
+    err := json.NewDecoder(r.Body).Decode(&dataResource)
+    if err != nil{
+        log.Println("Error en decode check personal: ",err)
+        panic(err)
+    }
+    personal := dataResource.Data
+    context := NewContext()
+    defer context.Close()
+    col := context.DbCollection("personals")
+    repo := &data.PersonalRepository{C: col}
+    personals := repo.Check(personal)
+	log.Println("peron: ", personals)
+	if len(personals)== 0{
+		log.Println("0")
+	}else{
+		log.Println("1")
+	}
+	j,err := json.Marshal(PersonalsResource{Data: personals})
+	if err != nil{
+		log.Println("Error en marshal personals check : ",err)
+		panic(err)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(j)
+}*/
+
 func GetPersonalsProject(w http.ResponseWriter, r *http.Request){
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	vars := mux.Vars(r)

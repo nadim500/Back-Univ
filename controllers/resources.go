@@ -58,6 +58,10 @@ type(
         Data []models.Personal `json:"data"`
     }
 
+	CheckTareaResource struct{
+		Data models.CheckTarea `json:"data"`
+	}
+	
     TareaResource struct {
 		Data models.Tarea `json:"data"`
 	}

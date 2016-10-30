@@ -27,6 +27,27 @@ func(d *PersonalRepository) GetAll() []models.Personal{
 	return personals
 }
 
+func(d *PersonalRepository) Check(personal models.CheckTarea) []models.Personal{
+	var person []models.Personal
+	idTrabajador:= personal.TrabajadorId
+	idProyecto := personal.ProyectoId
+	iter := d.C.Find(bson.M{
+		"$and": []bson.M{
+			bson.M{
+				"trabajadorid": idTrabajador,
+			},
+			bson.M{
+				"proyectoid": idProyecto,
+			},
+		},
+	}).Iter()
+	result := models.Personal{}
+	for iter.Next(&result){
+		person = append(person, result)
+	}
+	return person
+}
+
 func(d *PersonalRepository) GetAllForProject(id string) []models.Trabajador{
 	var personals []models.Trabajador
 	iter := d.C.Pipe([]bson.M{

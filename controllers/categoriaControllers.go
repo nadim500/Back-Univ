@@ -42,7 +42,6 @@ func GetCategorias(w http.ResponseWriter, r *http.Request){
     col := context.DbCollection("categorias")
     repo := &data.CategoriaRepository{C: col}
     categorias := repo.GetAll()
-    log.Println("categorias : ",categorias)
     j,err := json.Marshal(CategoriasResource{Data: categorias})
 	if err != nil{
 		log.Println("Error en marshal categorias : ",err)
