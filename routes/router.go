@@ -13,5 +13,7 @@ func InitRoutes() *mux.Router{
     router = SetTrabajadoresRoutes(router)
     router = SetCategoriasRoutes(router)
     router = SetTareasRoutes(router)
+    router = SetPartidaRoutes(router)
+    router = SetOtrosRoutes(router)
     return router
 }

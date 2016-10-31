@@ -42,6 +42,22 @@ type(
         Data []models.Categoria `json:"data"`
     }
 
+    PartidaResource struct{
+        Data models.Partida `json:"data"`
+    }
+
+    PartidasResource struct{
+        Data []models.Partida `json:"data"`
+    }
+
+    OtroResource struct{
+        Data models.Otro `json:"data"`
+    }
+
+    OtrosResource struct{
+        Data []models.Otro `json:"data"`
+    }
+
     TrabajadorResource struct{
         Data models.Trabajador `json:"data"`
     }

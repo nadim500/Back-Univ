@@ -44,6 +44,22 @@ type(
         Nombre string `json:"nombre"`
     }
 
+    Partida struct{
+        Id bson.ObjectId `bson:"_id,omitempty" json:"id"`
+        ProyectoId bson.ObjectId `bson:",omitempty" json:"proyectoid,omitempty"`
+        Nombre string `json:"nombre"`
+    }
+
+    Otro struct{
+        Id bson.ObjectId `bson:"_id,omitempty" json:"id"`
+        PartidaId bson.ObjectId `bson:",omitempty" json:"partidaid,omitempty"`
+        PersonalId bson.ObjectId `bson:",omitempty" json:"personalid,omitempty"`
+        DateRegistro time.Time `json:"dateregistro"`
+		DateRecordatorio time.Time `json:"daterecordatorio"`
+        Descripcion string `json:"descripcion"`
+        
+    }
+
     Trabajador struct{
         Id bson.ObjectId `bson:"_id,omitempty" json:"id"`
         UserId bson.ObjectId `bson:",omitempty" json:"userid,omitempty"`
