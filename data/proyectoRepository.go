@@ -244,6 +244,123 @@ func(p *ProyectoRepository) GetAllTodo(id string) []models.ProyectoWithAll{
                 },
 			},
 		},
+
+        bson.M{
+            "$lookup" : bson.M{
+                "from": "partidas",
+                "localField": "_id",
+                "foreignField": "proyectoid",
+                "as": "partidas",
+            },
+        },
+
+        bson.M{
+            "$unwind": "$partidas",
+        },
+
+        bson.M{
+            "$lookup": bson.M{
+                "from": "otros",
+                "localField": "partidas._id",
+                "foreignField": "partidaid",
+                "as": "otros",
+            },
+        },
+
+        bson.M{
+            "$unwind": "$otros",
+        },
+
+        bson.M{
+            "$lookup": bson.M{
+                "from": "personals",
+                "localField": "otros.personalid",
+                "foreignField": "_id",
+                "as": "otros.personals",
+            },
+        },
+
+        bson.M{
+            "$unwind": "$otros.personals",
+        },
+
+        bson.M{
+            "$lookup": bson.M{
+                "from": "trabajadores",
+                "localField": "otros.personals.trabajadorid",
+                "foreignField": "_id",
+                "as": "otros.personals.trabajador",
+            },
+        },
+
+        bson.M{
+            "$unwind": "$otros.personals.trabajador",
+        },
+
+        bson.M{
+            "$project": bson.M{
+                "_id": 1,
+                "codigo": 1,
+                "nombre": 1,
+                "descripcion": 1,
+                "status": 1,
+                "datestart": 1,
+                "dateend": 1,
+                "dateendfake": 1,
+                "documents": 1,
+                "personals": 1,
+                "tareas": 1,
+                "otros.responsable": "$otros.personals.trabajador.nombre",
+                "otros.partida": "$partidas.nombre",
+                "otros._id": 1,
+                "otros.partidaid": 1,
+                "otros.personalid": 1,
+                "otros.dateregistro": 1,
+                "otros.daterecordatorio": 1,
+                "otros.descripcion": 1,
+            },
+        },
+
+        bson.M{
+			"$group": bson.M{
+				"_id":"$_id",
+                "userid":bson.M{
+                    "$first": "$userid",
+                },
+				"codigo":bson.M{
+					"$first": "$codigo",
+				},
+				"nombre":bson.M{
+					"$first": "$nombre",
+				},
+				"descripcion":bson.M{
+					"$first": "$descripcion",
+				},
+				"datestart":bson.M{
+					"$first": "$datestart",
+				},
+				"dateend":bson.M{
+					"$first": "$dateend",
+				},
+				"dateendfake":bson.M{
+					"$first": "$dateendfake",
+				},
+				"status":bson.M{
+					"$first": "$status",
+				},
+				"documents":bson.M{
+					"$last": "$documents",
+				},
+                "tareas": bson.M{
+                    "$last": "$tareas",
+                },
+                "otros": bson.M{
+                    "$push": "$otros",
+                },
+			},
+		},
+
+        
 	}).Iter()
 	//log.Println("iter : ",iter)
 	result := models.ProyectoWithAll{}

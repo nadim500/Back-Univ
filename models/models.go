@@ -60,6 +60,17 @@ type(
         
     }
 
+    OtroAll struct{
+        Id bson.ObjectId `bson:"_id,omitempty" json:"id"`
+        PartidaId bson.ObjectId `bson:",omitempty" json:"partidaid,omitempty"`
+        PersonalId bson.ObjectId `bson:",omitempty" json:"personalid,omitempty"`
+        DateRegistro time.Time `json:"dateregistro"`
+		DateRecordatorio time.Time `json:"daterecordatorio"`
+        Descripcion string `json:"descripcion"`
+        Responsable string `json:"responsable"`
+        Partida string `json:"partida"`
+    }
+
     Trabajador struct{
         Id bson.ObjectId `bson:"_id,omitempty" json:"id"`
         UserId bson.ObjectId `bson:",omitempty" json:"userid,omitempty"`
@@ -157,6 +168,7 @@ type(
 		DateEndFake time.Time `json:"dateendfake"`
         Documents []DocumentoCategoryPersonal `json:"documents"`
         Tareas []TareaTrabajador `json:"tareas"`
+        Otros []OtroAll `json:"otros"`
     }
 
 	UserProjectModel struct{
