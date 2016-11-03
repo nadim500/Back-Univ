@@ -5,6 +5,7 @@ import(
     "encoding/json"
     "net/http"
 	"../data"
+	"github.com/gorilla/mux"
 )
 
 func CreateTrabajador(w http.ResponseWriter, r *http.Request){
@@ -49,6 +50,24 @@ func GetTrabajadores(w http.ResponseWriter, r *http.Request){
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	w.Write(j)
-	
+	w.Write(j)	
+}
+
+func GetTrabajadoresEntity(w http.ResponseWriter, r *http.Request){
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	vars := mux.Vars(r)
+    id := vars["id"]
+    context := NewContext()
+    defer context.Close()
+    col := context.DbCollection("trabajadores")
+    repo := &data.TrabajadorRepository{C: col}
+    trabajadores := repo.GetAllForEntity(id)
+    j,err := json.Marshal(TrabajadoresResource{Data: trabajadores})
+	if err != nil{
+		log.Println("Error en marshal trabajadores : ",err)
+		panic(err)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(j)	
 }

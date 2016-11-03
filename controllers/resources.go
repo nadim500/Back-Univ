@@ -93,14 +93,25 @@ type(
     LoginResource struct{
         Data LoginModel `json:"data"`
     }
-    
+
+	LoginTrabajadorResource struct{
+        Data LoginTrabajador `json:"data"`
+    }
+
+	LoginTrabajador struct{
+		Email string `json:"email"`
+        Password string `json:"password"`
+	}
+	
     LoginModel struct {
         Email string `json:"email"`
         Password string `json:"password"`
+		Empresa string `json:"empresa"`
+		Nombre string `json:"nombre"`
     }
     
     AuthUserModel struct {
-        User models.User `json:"user"`
+        User models.Trabajador `json:"user"`
         Token string `json:"token"`
         
     }

@@ -13,6 +13,7 @@ type TrabajadorRepository struct{
 func(d *TrabajadorRepository) Create(trabajador *models.Trabajador) error{
 	obj_id := bson.NewObjectId()
 	trabajador.Id = obj_id
+	trabajador.Type = "trabajador"
 	err := d.C.Insert(&trabajador)
 	return err
 }
@@ -20,6 +21,19 @@ func(d *TrabajadorRepository) Create(trabajador *models.Trabajador) error{
 func(d *TrabajadorRepository) GetAll() []models.Trabajador{
 	var trabajadores []models.Trabajador
 	iter := d.C.Find(nil).Iter()
+	result := models.Trabajador{}
+	for iter.Next(&result){
+		trabajadores = append(trabajadores, result)
+	}
+	return trabajadores
+}
+
+func(d *TrabajadorRepository) GetAllForEntity(id string) []models.Trabajador{
+	var trabajadores []models.Trabajador
+	iter := d.C.Find(bson.M{
+		"entityid": bson.ObjectIdHex(id),
+		"type": "trabajador",
+	}).Iter()
 	result := models.Trabajador{}
 	for iter.Next(&result){
 		trabajadores = append(trabajadores, result)

@@ -16,7 +16,8 @@ type(
 
 	Proyecto struct{
 		Id bson.ObjectId `bson:"_id,omitempty" json:"id"`
-		UserId bson.ObjectId `bson:",omitempty" json:"userid,omitempty"`
+		EntityId bson.ObjectId `bson:",omitempty" json:"entityid,omitempty"`
+		TrabajadorId bson.ObjectId `bson:",omitempty" json:"trabajadorid,omitempty"`
 		Codigo string `json:"codigo"`
 		Nombre string `json:"nombre"`
 		Descripcion string `json:"descripcion"`
@@ -57,7 +58,6 @@ type(
         DateRegistro time.Time `json:"dateregistro"`
 		DateRecordatorio time.Time `json:"daterecordatorio"`
         Descripcion string `json:"descripcion"`
-        
     }
 
     OtroAll struct{
@@ -73,9 +73,18 @@ type(
 
     Trabajador struct{
         Id bson.ObjectId `bson:"_id,omitempty" json:"id"`
-        UserId bson.ObjectId `bson:",omitempty" json:"userid,omitempty"`
+		EntityId bson.ObjectId `bson:",omitempty" json:"entityid,omitempty"`
+		Email string `json:"email"`
+		Password string `json:"password,omitempty"`
+		HashPassword []byte `json:"hashpassword,omitempty"`
+		Type string `json:"type"`
         Nombre string `json:"nombre"`
     }
+
+	Entity struct{
+		Id bson.ObjectId `bson:"_id,omitempty" json:"id"`
+		Nombre string `json:"nombre"`
+	}
 
     Personal struct{
         Id bson.ObjectId `bson:"_id,omitempty" json:"id"`
@@ -158,7 +167,8 @@ type(
 
     ProyectoWithAll struct{
         Id bson.ObjectId `bson:"_id,omitempty" json:"id"`
-		UserId bson.ObjectId `bson:",omitempty" json:"userid,omitempty"`
+		EntityId bson.ObjectId `bson:",omitempty" json:"entityid,omitempty"`
+		TrabajadorId bson.ObjectId `bson:",omitempty" json:"trabajadorid,omitempty"`
 		Codigo string `json:"codigo"`
 		Nombre string `json:"nombre"`
 		Descripcion string `json:"descripcion"`
@@ -169,6 +179,7 @@ type(
         Documents []DocumentoCategoryPersonal `json:"documents"`
         Tareas []TareaTrabajador `json:"tareas"`
         Otros []OtroAll `json:"otros"`
+        //Partidas Partida `json:"partidas"`
     }
 
 	UserProjectModel struct{

@@ -33,6 +33,18 @@ func(p *ProyectoRepository) GetAll() []models.Proyecto{
 	return projects
 }
 
+func(p *ProyectoRepository) GetAllForEntity(id string) []models.Proyecto{
+	var projects []models.Proyecto
+	iter := p.C.Find(bson.M{
+		"entityid" : bson.ObjectIdHex(id),
+	}).Iter()
+	result := models.Proyecto{}
+	for iter.Next(&result){
+		projects = append(projects, result)
+	}
+	return projects
+}
+
 func(p *ProyectoRepository) GetAllTodo(id string) []models.ProyectoWithAll{
 	var projects []models.ProyectoWithAll
 	log.Println("VINO AQUI")
@@ -98,14 +110,6 @@ func(p *ProyectoRepository) GetAllTodo(id string) []models.ProyectoWithAll{
 				"preserveNullAndEmptyArrays":true,
 			},
 		},
-		/*bson.M{
-			"$lookup": bson.M{
-				"from":"personals",
-				"localField":"_id",
-				"foreignField":"proyectoid",
-				"as":"personals",
-			},
-		},*/
 		bson.M{
 			"$group": bson.M{
 				"_id":"$_id",
@@ -115,6 +119,12 @@ func(p *ProyectoRepository) GetAllTodo(id string) []models.ProyectoWithAll{
 				"codigo":bson.M{
 					"$first": "$codigo",
 				},
+                "entityid":bson.M{
+                    "$first": "$entityid",
+                },
+                "trabajadorid":bson.M{
+                    "$first": "$trabajadorid",
+                },
 				"nombre":bson.M{
 					"$first": "$nombre",
 				},
@@ -136,9 +146,6 @@ func(p *ProyectoRepository) GetAllTodo(id string) []models.ProyectoWithAll{
 				"documents":bson.M{
 					"$push": "$documents",
 				},
-                /*"personals":bson.M{
-					"$last": "$personals",
-				},*/
 			},
 		},
 
@@ -193,6 +200,8 @@ func(p *ProyectoRepository) GetAllTodo(id string) []models.ProyectoWithAll{
                 "_id": 1,
                 "codigo": 1,
                 "nombre": 1,
+                "entityid": 1,
+                "trabajadorid": 1,
                 "descripcion": 1,
                 "status": 1,
                 "datestart": 1,
@@ -214,6 +223,12 @@ func(p *ProyectoRepository) GetAllTodo(id string) []models.ProyectoWithAll{
 				"_id":"$_id",
                 "userid":bson.M{
                     "$first": "$userid",
+                },
+                "entityid":bson.M{
+                    "$first": "$entityid",
+                },
+                "trabajadorid":bson.M{
+                    "$first": "$trabajadorid",
                 },
 				"codigo":bson.M{
 					"$first": "$codigo",
@@ -255,46 +270,66 @@ func(p *ProyectoRepository) GetAllTodo(id string) []models.ProyectoWithAll{
         },
 
         bson.M{
-            "$unwind": "$partidas",
+			"$unwind": bson.M{
+				"path":"$partidas",
+				"preserveNullAndEmptyArrays":true,
+			},
         },
+
+        /*bson.M{
+            "$unwind": "$partidas",
+        },*/
 
         bson.M{
             "$lookup": bson.M{
                 "from": "otros",
                 "localField": "partidas._id",
                 "foreignField": "partidaid",
-                "as": "otros",
+                "as": "partidas.otros",
             },
         },
 
         bson.M{
-            "$unwind": "$otros",
+			"$unwind": bson.M{
+				"path":"$partidas.otros",
+				"preserveNullAndEmptyArrays":true,
+			},
         },
+
+        /*bson.M{
+            "$unwind": "$partidas.otros",
+        },*/
 
         bson.M{
             "$lookup": bson.M{
                 "from": "personals",
-                "localField": "otros.personalid",
+                "localField": "partidas.otros.personalid",
                 "foreignField": "_id",
-                "as": "otros.personals",
+                "as": "partidas.otros.personals",
             },
         },
 
         bson.M{
-            "$unwind": "$otros.personals",
+			"$unwind": bson.M{
+				"path":"$partidas.otros.personals",
+				"preserveNullAndEmptyArrays":true,
+			},
         },
 
         bson.M{
             "$lookup": bson.M{
                 "from": "trabajadores",
-                "localField": "otros.personals.trabajadorid",
+                "localField": "partidas.otros.personals.trabajadorid",
                 "foreignField": "_id",
-                "as": "otros.personals.trabajador",
+                "as": "partidas.otros.personals.trabajador",
             },
         },
 
         bson.M{
-            "$unwind": "$otros.personals.trabajador",
+			"$unwind": bson.M{
+				"path":"$partidas.otros.personals.trabajador",
+				"preserveNullAndEmptyArrays":true,
+			},
         },
 
         bson.M{
@@ -310,22 +345,27 @@ func(p *ProyectoRepository) GetAllTodo(id string) []models.ProyectoWithAll{
                 "documents": 1,
                 "personals": 1,
                 "tareas": 1,
-                "otros.responsable": "$otros.personals.trabajador.nombre",
+                "entityid": 1,
+                "trabajadorid": 1,
+                "otros.responsable": "$partidas.otros.personals.trabajador.nombre",
                 "otros.partida": "$partidas.nombre",
-                "otros._id": 1,
-                "otros.partidaid": 1,
-                "otros.personalid": 1,
-                "otros.dateregistro": 1,
-                "otros.daterecordatorio": 1,
-                "otros.descripcion": 1,
+                "otros._id": "$partidas.otros._id",
+                "otros.partidaid": "$partidas.otros.partidaid",
+                "otros.personalid": "$partidas.otros.personalid",
+                "otros.dateregistro": "$partidas.otros.dateregistro",
+                "otros.daterecordatorio": "$partidas.otros.daterecordatorio",
+                "otros.descripcion": "$partidas.otros.descripcion",
             },
         },
 
-        bson.M{
+		bson.M{
 			"$group": bson.M{
 				"_id":"$_id",
-                "userid":bson.M{
-                    "$first": "$userid",
+                "entityid":bson.M{
+                    "$first": "$entityid",
+                },
+                "trabajadorid":bson.M{
+                    "$first": "$trabajadorid",
                 },
 				"codigo":bson.M{
 					"$first": "$codigo",

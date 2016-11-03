@@ -10,24 +10,38 @@ import(
 )
 
 func Register(w http.ResponseWriter, r *http.Request){
-    var dataResource UserResource
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+    var dataResource LoginResource
     err := json.NewDecoder(r.Body).Decode(&dataResource)
     if err != nil{
         log.Println(err)
 		panic(err)
     }
-    user := &dataResource.Data
-    context := NewContext()
+	context := NewContext()
     defer context.Close()
-    col := context.DbCollection("users")
+    user := &dataResource.Data
+	empresa := &models.Entity{
+		Nombre: user.Empresa,
+	}
+	col1 := context.DbCollection("entities")
+	repo1 := &data.EntityRepository{C: col1}
+	err = repo1.Create(empresa)
+	trabajador := &models.Trabajador{
+		EntityId: empresa.Id,
+		Email: user.Email,
+		Password: user.Password,
+		Type: "empresa",
+		Nombre: user.Nombre,
+	}
+    col := context.DbCollection("trabajadores")
     repo := &data.UserRepository{C: col}
-    err = repo.CreateUser(user)
+    err = repo.CreateUser(trabajador)
     if err != nil{
         log.Println(err)
 		panic(err)
     }
-    user.HashPassword = nil
-    j, err := json.Marshal(UserResource{Data: *user})
+    trabajador.HashPassword = nil
+    j, err := json.Marshal(TrabajadorResource{Data: *trabajador})
 	if err != nil {
 		log.Println(err)
 		panic(err)
@@ -39,24 +53,24 @@ func Register(w http.ResponseWriter, r *http.Request){
 
 func Login(w http.ResponseWriter, r *http.Request){
     w.Header().Set("Access-Control-Allow-Origin", "*")
-    var dataResource LoginResource
+    var dataResource LoginTrabajadorResource
     err := json.NewDecoder(r.Body).Decode(&dataResource)
     if err != nil{
-        log.Println(err)
+        log.Println("error decode:",err)
         panic(err)
     }
     LoginModel := dataResource.Data
-    loginUser := models.User{
+    loginUser := models.Trabajador{
         Email: LoginModel.Email,
         Password: LoginModel.Password,
     }
     context := NewContext()
     defer context.Close()
-    col := context.DbCollection("users")
+    col := context.DbCollection("trabajadores")
     repo := &data.UserRepository{C: col}
     usuario, err := repo.Login(loginUser)
     if err != nil{
-        log.Println(err)
+        log.Println("erro login",err)
         panic(err)
     }
     log.Println("-------------------->usuario :", usuario)

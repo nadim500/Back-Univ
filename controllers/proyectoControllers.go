@@ -78,6 +78,25 @@ func GetProjects(w http.ResponseWriter, r *http.Request){
 	w.Write(j)
 }
 
+func GetProjectsEntity(w http.ResponseWriter, r *http.Request){
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	vars := mux.Vars(r)
+	id := vars["id"]
+	context := NewContext()
+	defer context.Close()
+	col := context.DbCollection("proyectos")
+	repo := data.ProyectoRepository{C: col}
+	projects := repo.GetAllForEntity(id)
+	j,err := json.Marshal(ProyectosResource{Data: projects})
+	if err != nil{
+		log.Println("Error en marshal projectos : ",err)
+		panic(err)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(j)
+}
+
 func GetProjectsAll(w http.ResponseWriter, r *http.Request){
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	vars := mux.Vars(r)

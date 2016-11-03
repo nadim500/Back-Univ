@@ -6,17 +6,15 @@ import(
 	"gopkg.in/mgo.v2/bson"
     "log"
     "../models"
-    "time"
 )
 
 type UserRepository struct{
     C *mgo.Collection
 }
 
-func (r *UserRepository) CreateUser(user *models.User) error{
+func (r *UserRepository) CreateUser(user *models.Trabajador) error{
     obj_id := bson.NewObjectId()
     user.Id = obj_id
-    user.DateCreated = time.Now()
     hpass, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
     if err != nil{
         log.Fatalf("[hpass]: %s\n", err)
@@ -28,16 +26,16 @@ func (r *UserRepository) CreateUser(user *models.User) error{
     return err
 }
 
-func (r *UserRepository) Login(user models.User)(u models.User, err error){
+func (r *UserRepository) Login(user models.Trabajador)(u models.Trabajador, err error){
     err = r.C.Find(bson.M{"email": user.Email}).One(&u)
 	if err != nil {
-        u = models.User{}
+        u = models.Trabajador{}
 		return u, err
 	}
 
 	err = bcrypt.CompareHashAndPassword(u.HashPassword, []byte(user.Password))
 	if err != nil {
-		u = models.User{}
+		u = models.Trabajador{}
         return u, err
 	}
 	return u, nil
