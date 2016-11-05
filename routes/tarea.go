@@ -9,5 +9,6 @@ func SetTareasRoutes(router *mux.Router) *mux.Router{
     router.HandleFunc("/tareas",controllers.CreateTarea).Methods("POST")
 	router.HandleFunc("/tareas/check",controllers.CreateTareaCheck).Methods("POST")
     router.HandleFunc("/tareas",controllers.GetTareas).Methods("GET")
+	router.HandleFunc("/tareas/project/{id}",controllers.GetTareasProject).Methods("GET")
     return router
 }

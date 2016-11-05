@@ -5,6 +5,7 @@ import(
     "encoding/json"
     "net/http"
 	"../data"
+	"github.com/gorilla/mux"
 )
 
 func CreateOtro(w http.ResponseWriter, r *http.Request){
@@ -51,4 +52,24 @@ func GetOtros(w http.ResponseWriter, r *http.Request){
 	w.WriteHeader(http.StatusOK)
 	w.Write(j)
 	
+}
+
+func GetOtrosProject(w http.ResponseWriter, r *http.Request){
+	w.Header().Set("Access-Control-Allow-Origin","*")
+	//otros := make([]models.OtroAll,0)
+	vars := mux.Vars(r)
+    id := vars["id"]
+	context := NewContext()
+	defer context.Close()
+	col := context.DbCollection("partidas")
+    repo := &data.OtroRepository{C: col}
+	otros := repo.GetAllForProject(id)
+	j,err := json.Marshal(OtrosAllResource{Data: otros})
+	if err != nil{
+		log.Println("Error en marshal otros for project: ",err)
+		panic(err)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(j)
 }

@@ -5,6 +5,7 @@ import(
     "encoding/json"
     "net/http"
 	"../data"
+	"github.com/gorilla/mux"
 )
 
 func CreateDocument(w http.ResponseWriter, r *http.Request){
@@ -53,3 +54,23 @@ func GetDocumentos(w http.ResponseWriter, r *http.Request){
 	w.Write(j)
 	
 }
+
+func GetDocumentosProject(w http.ResponseWriter, r *http.Request){
+	w.Header().Set("Access-Control-Allow-Origin","*")
+	vars := mux.Vars(r)
+    id := vars["id"]
+	context := NewContext()
+	defer context.Close()
+	col := context.DbCollection("documentos")
+    repo := &data.DocumentoRepository{C: col}
+	documentos := repo.GetAllForProject(id)
+	j,err := json.Marshal(DocumentosResponsableResource{Data: documentos})
+	if err != nil{
+		log.Println("Error en marshal documentos for project: ",err)
+		panic(err)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(j)
+}
+

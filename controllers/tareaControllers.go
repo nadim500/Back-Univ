@@ -6,6 +6,7 @@ import(
     "net/http"
 	"../models"
 	"../data"
+	"github.com/gorilla/mux"
 )
 
 func CreateTarea(w http.ResponseWriter, r *http.Request){
@@ -121,6 +122,26 @@ func GetTareas(w http.ResponseWriter, r *http.Request){
     j,err := json.Marshal(TareasResource{Data: tareas})
 	if err != nil{
 		log.Println("Error en marshal tareas : ",err)
+		panic(err)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(j)
+	
+}
+
+func GetTareasProject(w http.ResponseWriter, r *http.Request){
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	vars := mux.Vars(r)
+    id := vars["id"]
+    context := NewContext()
+    defer context.Close()
+    col := context.DbCollection("personals")
+    repo := &data.TareaRepository{C: col}
+    tareas := repo.GetAllForProject(id)
+    j,err := json.Marshal(TareasTrabajadorResource{Data: tareas})
+	if err != nil{
+		log.Println("Error en marshal tareas trabajador de projecto : ",err)
 		panic(err)
 	}
 	w.Header().Set("Content-Type", "application/json")

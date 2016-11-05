@@ -40,6 +40,21 @@ type(
         UrlDocument string `json:"urldocument"`
     }
 
+	DocumentoResponsable struct{
+        Id bson.ObjectId `bson:"_id,omitempty" json:"id"`
+        CategoriaId bson.ObjectId `bson:",omitempty" json:"categoriaid,omitempty"`
+        ProyectoId bson.ObjectId `bson:",omitempty" json:"proyectoid,omitempty"`
+        PersonalId bson.ObjectId `bson:",omitempty" json:"personalid,omitempty"`
+        Nombre string `json:"nombre"`
+        Version string `json:"version"`
+        DateCreated time.Time `json:"datecreated"`
+		DateRecordatorio time.Time `json:"daterecordatorio"`
+        Comentario string `json:"comentario"`
+        UrlDocument string `json:"urldocument"`
+		Categoria string `json:"categoria"`
+		Responsable string `json:"responsable"`
+    }
+
     Categoria struct{
         Id bson.ObjectId `bson:"_id,omitempty" json:"id"`
         Nombre string `json:"nombre"`
@@ -49,6 +64,13 @@ type(
         Id bson.ObjectId `bson:"_id,omitempty" json:"id"`
         ProyectoId bson.ObjectId `bson:",omitempty" json:"proyectoid,omitempty"`
         Nombre string `json:"nombre"`
+    }
+
+	PartidaOtro struct{
+        Id bson.ObjectId `bson:"_id,omitempty" json:"id"`
+        ProyectoId bson.ObjectId `bson:",omitempty" json:"proyectoid,omitempty"`
+        Nombre string `json:"nombre"`
+		Otros []OtroAll `json:"otros"`
     }
 
     Otro struct{
@@ -90,6 +112,13 @@ type(
         Id bson.ObjectId `bson:"_id,omitempty" json:"id"`
         ProyectoId bson.ObjectId `bson:",omitempty" json:"proyectoid,omitempty"`
         TrabajadorId bson.ObjectId `bson:",omitempty" json:"trabajadorid,omitempty"`
+    }
+
+	PersonalTarea struct{
+        Id bson.ObjectId `bson:"_id,omitempty" json:"id"`
+        ProyectoId bson.ObjectId `bson:",omitempty" json:"proyectoid,omitempty"`
+        TrabajadorId bson.ObjectId `bson:",omitempty" json:"trabajadorid,omitempty"`
+		Tareas []TareaTrabajador `json:"tareas"`
     }
 
     Tarea struct{
@@ -154,15 +183,8 @@ type(
         DateStart time.Time `json:"datestart"`
         DateEnd time.Time `json:"dateend"`
         Trabajador string `json:"trabajador"`
-    }
-
-    PersonalTarea struct{
-        Id bson.ObjectId `bson:"_id,omitempty" json:"id"`
-        ProyectoId bson.ObjectId `bson:",omitempty" json:"proyectoid,omitempty"`
-        TrabajadorId bson.ObjectId `bson:",omitempty" json:"trabajadorid,omitempty"`
-        DocumentoId bson.ObjectId `bson:",omitempty" json:"documentoid,omitempty"`
-        Trabajador Trabajador `json:"trabajador"`
-        //Tareas []Tarea `json:"tareas"`
+		DateRegistro time.Time `json:"dateregistro"`
+		DateRecordatorio time.Time `json:"daterecordatorio"`
     }
 
     ProyectoWithAll struct{

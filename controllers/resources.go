@@ -34,6 +34,10 @@ type(
         Data []models.Documento `json:"data"`
     }
 
+	DocumentosResponsableResource struct{
+		Data []models.DocumentoResponsable `json:"data"`
+	}
+
     CategoriaResource struct{
         Data models.Categoria `json:"data"`
     }
@@ -50,6 +54,10 @@ type(
         Data []models.Partida `json:"data"`
     }
 
+	PartidasOtroResource struct{
+        Data []models.PartidaOtro `json:"data"`
+    }
+
     OtroResource struct{
         Data models.Otro `json:"data"`
     }
@@ -57,6 +65,10 @@ type(
     OtrosResource struct{
         Data []models.Otro `json:"data"`
     }
+
+	OtrosAllResource struct{
+		Data []models.OtroAll `json:"data"`
+	}
 
     TrabajadorResource struct{
         Data models.Trabajador `json:"data"`
@@ -84,6 +96,10 @@ type(
 
 	TareasResource struct{
 		Data []models.Tarea `json:"data"`
+	}
+
+	TareasTrabajadorResource struct{
+		Data []models.TareaTrabajador `json:"data"`
 	}
 	
     AuthUserResource struct {
