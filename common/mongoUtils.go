@@ -57,6 +57,12 @@ func addIndexes(){
         Background: true,
         Sparse: true,
     }
+    trabajadorIndex := mgo.Index{
+        Key: []string{"email"},
+        Unique: true,
+        Background: true,
+        Sparse: true,
+    }
     session := GetSession().Copy()
     defer session.Close()
     userCol := session.DB(AppConfig.Database).C("users")
@@ -71,6 +77,11 @@ func addIndexes(){
 	}
     documentoCol := session.DB(AppConfig.Database).C("documentos")
 	err = documentoCol.EnsureIndex(documentoIndex)
+	if err != nil{
+		log.Fatalf("[addIndexes]: %s\n", err)
+	}
+    trabajadorCol := session.DB(AppConfig.Database).C("trabajadores")
+	err = trabajadorCol.EnsureIndex(trabajadorIndex)
 	if err != nil{
 		log.Fatalf("[addIndexes]: %s\n", err)
 	}
