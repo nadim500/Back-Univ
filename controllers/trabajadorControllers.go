@@ -36,6 +36,54 @@ func CreateTrabajador(w http.ResponseWriter, r *http.Request){
 	w.Write(j)
 }
 
+func UpdateTrabajador(w http.ResponseWriter, r *http.Request){
+    w.Header().Set("Access-Control-Allow-Origin", "*")
+    vars := mux.Vars(r)
+    id := vars["id"]
+    var dataResource TrabajadorResource
+    err := json.NewDecoder(r.Body).Decode(&dataResource)
+    if err != nil{
+        log.Println("Error en decode nuevo trabajador: ",err)
+        panic(err)
+    }
+    trabajador := &dataResource.Data
+    context := NewContext()
+    defer context.Close()
+    col := context.DbCollection("trabajadores")
+    repo := &data.TrabajadorRepository{C: col}
+    if trabajador.Password == ""{
+        log.Println("nil password")
+        err = repo.UpdateNoPwd(id,trabajador)
+        if err != nil{
+            log.Println("Error en editar trabajador sin pwd: ",err)
+            panic(err)
+        }
+        j,err := json.Marshal(TrabajadorResource{Data: *trabajador})
+        if err != nil{
+            log.Println("Error en marshal trabajador : ",err)
+            panic(err)
+        }
+        w.Header().Set("Content-Type", "application/json")
+        w.WriteHeader(http.StatusOK)
+        w.Write(j)
+    }else{
+        err = repo.Update(id,trabajador)
+        if err != nil{
+            log.Println("Error en editar trabajador sin pwd: ",err)
+            panic(err)
+        }
+        trabajador.HashPassword = nil
+        j,err := json.Marshal(TrabajadorResource{Data: *trabajador})
+        if err != nil{
+            log.Println("Error en marshal trabajador : ",err)
+            panic(err)
+        }
+        w.Header().Set("Content-Type", "application/json")
+        w.WriteHeader(http.StatusOK)
+        w.Write(j)
+    }
+}
+
 func GetTrabajadores(w http.ResponseWriter, r *http.Request){
 	w.Header().Set("Access-Control-Allow-Origin", "*")
     context := NewContext()
